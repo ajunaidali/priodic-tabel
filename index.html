@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anime.js Periodic Table Auto Layout animation</title>
 
   <style>
@@ -730,12 +731,13 @@ fieldset>*:last-child {
     gap: 0.5rem;
   }
   .controls-group {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
     gap: 0.5rem;
   }
   .controls button {
-    width: 100%;
+    width: calc(50% - 0.25rem);
     font-size: 1rem;
     padding: 0.5rem 0;
   }
@@ -745,20 +747,34 @@ fieldset>*:last-child {
     height: calc(100% - var(--header-height));
   }
   #scene-content[data-layout="table"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: minmax(2.5rem, auto);
-    gap: 0.15rem;
+    gap: 0.5vw;
   }
   .element {
-    --w: 2.5rem;
-    --h: 2.8rem;
-    font-size: 0.8rem;
-    padding: 0.1rem;
+    --w: 4.8vw;
+    --h: 6vw;
+    padding: 0.2vw;
+    border-radius: 0.5vw;
+    border-width: 0.2vw;
+  }
+  .element .element-symbol {
+    font-size: 2.2vw;
+    margin: 0;
+  }
+  .element .element-title,
+  .element .element-number {
+    font-size: 1.1vw;
   }
   .element.is-expanded {
-    --w: 8.5rem;
-    --h: 8.5rem;
-    padding: 0.5rem;
+    --w: 40vw;
+    --h: 40vw;
+    padding: 2vw;
+  }
+  .element.is-expanded .element-symbol {
+    font-size: 6vw;
+  }
+  .element.is-expanded .element-title,
+  .element.is-expanded .element-number {
+    font-size: 3vw;
   }
   .credits {
     font-size: 0.65rem;
@@ -997,7 +1013,8 @@ const transformLayout = {
     });
   },
   sphere: () => {
-    const radius = 300;
+    const scale = Math.min(window.innerWidth / 1000, 1);
+    const radius = 300 * scale;
     pointer.rotateX = 40;
     pointer.rotateY = 360;
     cards.forEach(($el, i) => {
@@ -1016,9 +1033,10 @@ const transformLayout = {
   helix: () => {
     pointer.rotateX = 30;
     pointer.rotateY = 300;
-    const radius = 400;
+    const scale = Math.min(window.innerWidth / 1000, 1);
+    const radius = 400 * scale;
     const thetaStep = 0.16;
-    const verticalSpacing = 3;
+    const verticalSpacing = 3 * scale;
     const yOffset = (cards.length * verticalSpacing) / 2;
     cards.forEach(($el, i) => {
       const offsetZ = $el.classList.contains('is-expanded') ? 20 : 0;
@@ -1034,11 +1052,12 @@ const transformLayout = {
   grid: () => {
     pointer.rotateX = 10;
     pointer.rotateY = 60;
+    const scale = Math.min(window.innerWidth / 1000, 1);
     const cols = 5;
     const rows = 5;
-    const colGap = 150;
-    const rowGap = 100;
-    const depthGap = 150;
+    const colGap = 150 * scale;
+    const rowGap = 100 * scale;
+    const depthGap = 150 * scale;
     const perLayer = cols * rows;
     const layers = Math.ceil(cards.length / perLayer);
     cards.forEach(($el, i) => {
